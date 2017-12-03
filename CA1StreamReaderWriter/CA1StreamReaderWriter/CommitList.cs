@@ -9,7 +9,7 @@ namespace CA1StreamReaderWriter
 	class CommitList
 	{
 		//local varialbes
-		List<Commit> commitList = new List<Commit>();
+		public static List<Commit> commitList = new List<Commit>();
 
 		//properties
 
@@ -18,7 +18,7 @@ namespace CA1StreamReaderWriter
 		//methods
 
 		//Add item to list
-		public void AddtoList(string cref, string auth, string date, int lines, string comment, string[] paths)
+		public void AddToList(string cref, string auth, string date, int lines, string comment, string[] paths)
 		{
 			Commit c = new Commit(cref, auth, date, lines, comment, paths);
 			commitList.Add(c);
