@@ -43,21 +43,19 @@ namespace CA1StreamReaderWriter
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.Append(CommitRef);
-			sb.Append(" | ");
+			sb.Append(",");
 			sb.Append(Author);
-			sb.Append(" | ");
+			sb.Append(",");
 			sb.Append(CommitDate);
-			sb.Append(" | ");
+			sb.Append(",");
 			sb.Append(CommitCommentLines.ToString());
-			sb.Append(" | ");
-			sb.Append(CommitComment);
-			
-			//foreach (string path in CommitChangedPaths)
-			//{
-			//	sb.Append(" | ");
-			//	sb.Append(path);
-
-			//}
+			sb.Append(",");
+			sb.Append(CommitComment);			
+			foreach (string path in CommitChangedPaths)
+			{
+				sb.Append(",");
+				sb.Append(path);
+			}
 			
 			return sb.ToString();
 		}

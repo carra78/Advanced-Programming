@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace CA1StreamReaderWriter
 {
@@ -65,6 +66,32 @@ namespace CA1StreamReaderWriter
 			}
 
 			return result;
+		}
+
+		public void WriteListToFile(List<Commit> list, string filePath, bool replaceExistingFile)
+		{
+			//if delete existing file selected
+			if (replaceExistingFile)
+			{
+				if (System.IO.File.Exists(filePath))
+				{
+					System.IO.File.Delete(filePath);
+				}
+			}
+
+			using (FileStream fstream = File.Open(filePath, FileMode.OpenOrCreate))
+				{
+					using (TextWriter writer = new StreamWriter(fstream, Encoding.UTF8))
+					{
+						foreach (var item in list)
+						{
+							writer.WriteLine(item.ToString());
+						}
+					}
+				}
+			
+
+
 		}
 
 	}

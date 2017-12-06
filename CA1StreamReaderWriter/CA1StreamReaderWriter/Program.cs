@@ -14,10 +14,11 @@ namespace CA1StreamReaderWriter
 		{
 			//declare variables
 			string pat = @"-{72}"; //hyphen pattern
-			string filepath = @"D:\Adv Prog\Advanced-Programming\commit-changes.txt";
+			string filepath = @"D:\Adv Prog\Advanced-Programming\commit-changes.txt"; //user to update?
 			string[] separator = { "|" }; //for string split functions
 			string[] lines = System.IO.File.ReadAllLines(filepath);//create an array of all lines in the file
 			int counter = 0; //use to move through the lines in the file
+			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\commit-changes.csv";
 
 			//instantiate classes
 			MyMethods methods = new MyMethods();
@@ -66,15 +67,17 @@ namespace CA1StreamReaderWriter
 
 			}
 			//write out parsed data to csv file
+			methods.WriteListToFile(CommitList.commitList, filePath, true);
 
+			//confirm whether file has been successfully updated or not
+			Console.WriteLine("Success");
+			
 
-
-
-			//checking parsing of file before writing to file
-			foreach (var commit in CommitList.commitList)
-			{
-				Console.WriteLine(commit.ToString());
-			}
+			//used to check parsing of file before writing to file
+			//foreach (var commit in CommitList.commitList)
+			//{
+			//	Console.WriteLine(commit.ToString());
+			//}
 			Console.ReadLine();
 		}
 	}
