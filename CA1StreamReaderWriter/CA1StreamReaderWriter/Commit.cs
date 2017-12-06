@@ -38,7 +38,7 @@ namespace CA1StreamReaderWriter
 
 
 		//Method(s)
-		// string override used for testing result of string split
+		// string override used for testing result of string split with console.writeline
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
@@ -51,6 +51,14 @@ namespace CA1StreamReaderWriter
 			sb.Append(CommitCommentLines.ToString());
 			sb.Append(" | ");
 			sb.Append(CommitComment);
+			
+			//foreach (string path in CommitChangedPaths)
+			//{
+			//	sb.Append(" | ");
+			//	sb.Append(path);
+
+			//}
+			
 			return sb.ToString();
 		}
 

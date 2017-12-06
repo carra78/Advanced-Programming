@@ -12,65 +12,64 @@ namespace CA1StreamReaderWriter
 	{
 		static void Main(string[] args)
 		{
+			//declare variables
 			string pat = @"-{72}"; //hyphen pattern
 			string filepath = @"D:\Adv Prog\Advanced-Programming\commit-changes.txt";
-			CommitList cl = new CommitList();
-			string[] separator = { "|" };
+			string[] separator = { "|" }; //for string split functions
+			string[] lines = System.IO.File.ReadAllLines(filepath);//create an array of all lines in the file
+			int counter = 0; //use to move through the lines in the file
 
-			string[] lines = System.IO.File.ReadAllLines(filepath);
+			//instantiate classes
+			MyMethods methods = new MyMethods();
+			CommitList cl = new CommitList();			
 			Regex filebreakpattern = new Regex(pat);
-
-			for (int i = 0; i < (lines.Length - 1); i++)
+			
+			//iterate through all lines and parse into ref, author, date, comments and changedpaths
+			while( counter < lines.Length-1)
 			{
-				if (filebreakpattern.IsMatch(lines[i].ToString()))
+				if (filebreakpattern.IsMatch(lines[counter].ToString()))//check if hyphen pattern
 				{
+					counter = counter + 1;//no of the line after hyphens
 
-					int c = i + 1;//no of the line after hyphens
-
-					//split the first line of each commit into components
-					string split = lines[c].ToString();
+					//split the first line of each commit into array
+					string split = lines[counter].ToString();
 					string[] myarr = split.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+
 					//trim each string stored in the array to remove extra spaces
-					for (int j = 0; j < myarr.Length; j++)
-					{
-						string b = myarr[j];
-						myarr[j] = b.Trim();
-					}
+					myarr = methods.TrimArrayStrings(myarr);
+
 					//remove extra information from date - allows for conversion to DateTime if required
-					string tempDate = myarr[2].Substring(0, 19);
-					myarr[2] = tempDate;
-					//					
-					int noOfLines = int.Parse(myarr[3].Substring(0, 1));
+					myarr[2] = myarr[2].Substring(0, 19);				
+
 					//move the reader to start of file paths changed
-					c = c + 2;
+					counter = counter + 2;
 
 					//create array of paths changed
-					StringBuilder sb = new StringBuilder();					
-					string test = lines[c];
-					while (!String.IsNullOrEmpty(test) && (c < lines.Length - 1))
-					{
-						sb.Append(lines[c]);
-						sb.Append("|");
-						c++;
-						test = lines[c];
+					string[] changedPaths = methods.MyStringBuilder(lines, ref counter).ToString().Split(separator, StringSplitOptions.RemoveEmptyEntries);
+					changedPaths = methods.TrimArrayStrings(changedPaths);
 
-					}
-					string[] changedPaths = sb.ToString().Split(separator, StringSplitOptions.RemoveEmptyEntries);
+					//Determine number of comment lines (all less than 10)					
+					int noOfLines = methods.IntAtStartOfString(myarr[3].ToString());
 
 					//combine all comment lines into one string
-					StringBuilder comment = new StringBuilder();
-					for (int y = 1; y < noOfLines + 1; y++)
-					{
-						c++;
-						comment.Append(lines[c] + " ");
-
-					}
+					string comment = methods.MyStringBuilder(lines, ref counter, noOfLines).ToString();
+					
 					//add individual commit details to commit list
-					cl.AddToList(myarr[0], myarr[1], myarr[2], noOfLines, comment.ToString(), changedPaths);
+					cl.AddToList(myarr[0], myarr[1], myarr[2], noOfLines, comment, changedPaths);
 
+					counter++; //move counter to next line
+				}
+				else
+				{
+					counter++;
 				}
 
 			}
+			//write out parsed data to csv file
+
+
+
+
 			//checking parsing of file before writing to file
 			foreach (var commit in CommitList.commitList)
 			{
