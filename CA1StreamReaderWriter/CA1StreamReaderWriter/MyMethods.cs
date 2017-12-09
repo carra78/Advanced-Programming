@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+
 namespace CA1StreamReaderWriter
 {
 	class MyMethods
@@ -21,23 +22,27 @@ namespace CA1StreamReaderWriter
 		}
 
 		//Combine elements of a string array into a string
-		public StringBuilder MyStringBuilder(string[] myArray, ref int myInt)
+		public StringBuilder MyStringBuilder(string[] myArray, ref int myInt, string filebreakpattern)
 		{
 			StringBuilder sb = new StringBuilder();
+			System.Text.RegularExpressions.Regex filebreak = new System.Text.RegularExpressions.Regex(filebreakpattern);
 			string test = myArray[myInt];
-			while (!String.IsNullOrEmpty(test) && (myInt < myArray.Length - 1))
+
+			while (!filebreak.IsMatch(test) && !String.IsNullOrEmpty(test))
 			{
-				sb.Append(myArray[myInt]);
-				sb.Append("|");
-				myInt++; //move to next line
-				test = myArray[myInt]; //change line to test to next to next line
-
+				
+					sb.Append(myArray[myInt]);
+					sb.Append("|");
+					myInt++; //move to next line
+					test = myArray[myInt]; //change line to test to next to next line
+				
 			}
-
 			return sb;
 		}
 
-		//overload - combine elements of a string array into a string
+		//overload - combine elements of a string array into a string.
+		//not needed - updated first MyStringBuilderMethod to find both changed paths and comments
+		//left in for completeness
 		public StringBuilder MyStringBuilder(string[] myArray, ref int myCounter, int repeat)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -80,17 +85,35 @@ namespace CA1StreamReaderWriter
 			}
 
 			using (FileStream fstream = File.Open(filePath, FileMode.OpenOrCreate))
-				{
+				
 					using (TextWriter writer = new StreamWriter(fstream, Encoding.UTF8))
-					{
+					
 						foreach (var item in list)
 						{
 							writer.WriteLine(item.ToString());
-						}
-					}
-				}
-			
+						}				
+		}//end of WriteListToFile Method
 
+		public void SkipLines(string [] toCheck, ref int counter)
+		{
+			string test = toCheck[counter];
+			while (String.IsNullOrEmpty(test))
+			{
+				counter++;
+				test = toCheck[counter];
+
+			}
+		}
+		public void SkipLines(string[] toCheck, ref int counter, string toSkip)
+		{
+			string test = toCheck[counter];
+			
+			while (String.IsNullOrEmpty(test) ||  test.ToLower() == toSkip.ToLower())
+			{
+				counter++;
+				test = toCheck[counter];
+			}
+			
 
 		}
 

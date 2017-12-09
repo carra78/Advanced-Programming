@@ -14,7 +14,7 @@ namespace CA1StreamReaderWriter
 		public string CommitRef { get; set; }
 		public string Author { get; set; }
 		public string CommitDate { get; set; }
-		public int CommitCommentLines { get; set; }
+		//public int CommitCommentLines { get; set; }
 		public string CommitComment { get; set; }
 		public string[] CommitChangedPaths { get; set; }
 
@@ -24,12 +24,12 @@ namespace CA1StreamReaderWriter
 			//default construtor - temporarily included as overriden by addition of any other constructor 
 		}
 
-		public Commit(string cref, string auth, string date, int lines, string comment, string[] paths)
+		public Commit(string cref, string auth, string date, /*int lines,*/ string comment, string[] paths)
 		{
 			CommitRef = cref;
 			Author = auth;
 			CommitDate = date;
-			CommitCommentLines = lines;
+			//CommitCommentLines = lines;
 			CommitComment = comment;
 			CommitChangedPaths = paths;
 
@@ -48,8 +48,8 @@ namespace CA1StreamReaderWriter
 			sb.Append(",");
 			sb.Append(CommitDate);
 			sb.Append(",");
-			sb.Append(CommitCommentLines.ToString());
-			sb.Append(",");
+			//sb.Append(CommitCommentLines.ToString());
+			//sb.Append(",");
 			sb.Append(CommitComment);			
 			foreach (string path in CommitChangedPaths)
 			{
