@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 
 namespace CA3CalculatorC
 {
-	public delegate T oneValueFunction<T>(T value1, string function);
-	public delegate T twoValueFunction<T>(T value1, T value2, string function);
-
 	public class Calculator
 	{
 		//Variables
@@ -26,14 +23,19 @@ namespace CA3CalculatorC
 			{ "%","Percent to Decimal" },
 			{ "!","Factorial" }
 		};
-		
-		
-		private static string[] oneValueSymbols = { "s", "r", "c", "%", "!" };
+
+		//private static string[] oneValueSymbols = { "s", "r", "c", "%", "!" };
 		private static string[] twoValueSymbols = { "+", "-", "*", "/", "^" };
 
-		// Properties
-		public decimal UserInput1 { get; set; }
-		public decimal UserInput2 { get; set; }
+		//Properties
+		public string[] TwoValueSymbols
+		{
+			get
+			{
+				return twoValueSymbols;
+			}
+		}
+		
 		public Dictionary<string, string> MyFunctions
 		{
 			get
@@ -43,36 +45,33 @@ namespace CA3CalculatorC
 		}
 		public string UserFunction { get; set; }
 		
-
-
-
 		//Constructor
 		//use default
 
 		//Methods
-		public decimal Add(decimal value1, decimal value2, string function = "+")
+		public static decimal Add(decimal value1, decimal value2)
 		{
 			return value1 + value2;
 		}
 
-		public decimal Cube(decimal value, string function = "c")
+		public static decimal Cube(decimal value)
 		{
 			return value * value * value;			
 		}
 
-		public decimal Divide(decimal value1, decimal value2, string function = "/")
+		public static decimal Divide(decimal value1, decimal value2)
 		{
 			return value1 / value2;
 		}
 
-		public double Exponent(double baseNumber, double power, string function = "^")
+		public static double Exponent(double baseNumber, double power)
 		{
 			return Math.Pow(baseNumber, power);
 		}
 
-		public int Factorial(int value, string function = "!")
+		public static int Factorial(int value)
 		{
-			
+
 			if (value < 0)
 			{
 				throw new ArithmeticException("Not possible to calculate factorial value of negative numbers.");
@@ -87,22 +86,31 @@ namespace CA3CalculatorC
 			}
 		}
 
-		public decimal Multiply(decimal value1, decimal value2, string function = "*")
+		public static decimal Multiply(decimal value1, decimal value2)
 		{
 			return value1 * value2;
 		}
 
-		public decimal PercentToDecimal(decimal value, string function = "%")
+		public static decimal PercentToDecimal(decimal value)
 		{
 			return value / 100;
 		}
 
-		public decimal Square(decimal value, string function = "s")
+		public void PrintFunction()
+		{
+			foreach (KeyValuePair<string, string> pair in myFunctions)
+			{
+				Console.Write("| {0} : {1} |", pair.Key, pair.Value);
+			}
+			Console.WriteLine();
+		}
+
+		public static decimal Square(decimal value)
 		{
 			return value * value;
 		}
 
-		public double SquareRoot(double value, string function = "r")
+		public static double SquareRoot(double value)
 		{
 			if (value <=0)
 			{
@@ -114,19 +122,113 @@ namespace CA3CalculatorC
 			}
 		}
 
-		//public decimal SelectedFunction(string function, decimal value1, decimal value2 = 0)
-		//{
-		//	oneValueFunction oneval = new oneValueFunction();
+		public dynamic SelectedFunction(string function, string input1, string input2 = "0")
+		{
+			switch (function)
+			{				
+				case "+":
+					{
+						try
+						{
+							return Calculator.Add(decimal.Parse(input1), decimal.Parse(input2));
+						}
+						catch (Exception)
+						{
+							throw new ArithmeticException("Invalid input - try again!");
+						}
+					 }
+				case "c":
+					try
+					{
+						return Calculator.Cube(decimal.Parse(input1));
+					}
+					catch (Exception e)
+					{
+						return e.Message.ToString();
+					}
+				case "-":
+					try
+					{
+						return Calculator.Subtract(decimal.Parse(input1), decimal.Parse(input2));
+					}
+					catch (Exception e)
+					{
+						return e.Message.ToString();
+					}
+				case "*":
+					try
+					{
+						return Calculator.Multiply(decimal.Parse(input1),decimal.Parse(input2));
+					}
+					catch (Exception e)
+					{
+						return e.Message.ToString();
+					}
+				case "/":
+					try
+					{
+						return Calculator.Divide(decimal.Parse(input1), decimal.Parse(input2));
+					}
+					catch (DivideByZeroException e)
+					{
+						return e.Message.ToString();
+					}
+					
+				case "^":
+					try
+					{
+						return Calculator.Exponent(double.Parse(input1), double.Parse(input2));
+					}
+					catch (Exception e)
+					{
+						return e.Message.ToString();
+					}
+				case "s":
+					try
+					{
+						return Calculator.Square(decimal.Parse(input1));
+					}
+					catch (Exception e)
+					{
+						return e.Message.ToString();
+					}
+				case "r":
+					try
+					{
+						return Calculator.SquareRoot(double.Parse(input1));
+					}
+					catch (ArithmeticException e)
+					{
+						return e.Message.ToString();
+					}
 
-		//	if (oneValueSymbols.Contains(function))
-		//	{
+				case "%":
+					try
+					{
+						return Calculator.PercentToDecimal(decimal.Parse(input1));
+					}
+					catch (Exception e)
+					{
+						return e.Message.ToString();
+					}
+				case "!":
+					try
+					{
+						return Calculator.Factorial(int.Parse(input1));
+					}
+					catch (ArithmeticException e)
+					{
+						return e.Message.ToString();
+					}
+					
 
-		//	}
+				default:
+					return "Invalid input - try again";
+			}
 
-		//	return 13;
-		//}
+		}
 
-		public decimal Subtract(decimal value1, decimal value2, string function = "-")
+		public static decimal Subtract(decimal value1, decimal value2)
 		{
 			return value1 - value2;
 		}
