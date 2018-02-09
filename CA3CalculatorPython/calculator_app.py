@@ -6,17 +6,17 @@ mycalc.printFunction()
 
 uinput = ''
 
-while (mycalc.userinput == False):
+while (mycalc.quitCheck == False):
     try:
         uinput = input("\n\nEnter a number to start or q to exit: ")
         mycalc.checkQuit(uinput)
-        if mycalc.userinput:
+        if mycalc.quitCheck:
             break
         else:
             mycalc.userinput1 = uinput
             uinput = input("Select a function: ")
             mycalc.checkQuit(uinput)
-            if (mycalc.userinput):
+            if (mycalc.quitCheck):
                 break
             else:
                 mycalc.userfunction = uinput
@@ -26,7 +26,7 @@ while (mycalc.userinput == False):
                 elif mycalc.userfunction in mycalc.twoValueSymbols:
                     uinput = input('Enter a second number: ')
                     mycalc.checkQuit(uinput)
-                    if(mycalc.userinput):
+                    if(mycalc.quitCheck):
                         break
                     else:
                         mycalc.userinput2 = uinput

@@ -20,7 +20,7 @@ class Calculator(object):
         self.__oneValueSymbols = ['s','r','c','%','!']
         self.__twoValueSymbols = ['+','-','*','/','^']
         self.userfunction = ''
-        self.userinput = False
+        self.quitCheck = False
         
     @property
     def userinput1(self):
@@ -120,7 +120,7 @@ class Calculator(object):
                     return result
     def checkQuit(self, input):
         if (input == 'q' or input =='Q'):
-            self.userinput = True
+            self.quitCheck = True
             return print("Goodbye!")
         
 
